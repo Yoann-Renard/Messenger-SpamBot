@@ -1,3 +1,4 @@
+import sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -17,9 +18,14 @@ StartTime = time.time()
 ## INITIALISATION ##
 
 print("Driver init...")
-
-#executable = "chromedriver.exe"
-executable = "chromedriver"
+platform = sys.platform
+if platform == "linux":
+    executable = "chromedriver"
+elif platform == "win32" or platform == "darwin":
+    executable = "chromedriver.exe"
+else:
+    print(f"System {plateform}not supported.")
+    exit(1)
 path = os.path.join("bin", executable)
 #Options
 chrome_options = Options()
@@ -167,11 +173,15 @@ class Facebook():
 
 class setInterval:
     def __init__(self, interval, action):
-        self.interval = interval
-        self.action = action
-        self.stopEvent = threading.Event()
-        thread = threading.Thread(target=self.__setInterval)
-        thread.start()
+        try:
+            self.interval = interval
+            self.action = action
+            self.stopEvent = threading.Event()
+            thread = threading.Thread(target=self.__setInterval)
+            thread.start()
+        except KeyboardInterrupt:
+            print("\nBye.")
+            exit(0)
 
     def __setInterval(self):
         nextTime = time.time()+self.interval
