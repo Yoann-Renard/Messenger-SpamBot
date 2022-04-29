@@ -95,9 +95,13 @@ class Facebook():
         """
 
         driver.get(url_facebook)
-        self.username = os.environ["FB_USER"]
-        self.email = os.environ["FB_EMAIL"]
-        self.password = os.environ["FB_PASS"]
+        try:
+            self.username = os.environ["FB_USER"]
+            self.email = os.environ["FB_EMAIL"]
+            self.password = os.environ["FB_PASS"]
+        except KeyError:
+            print("FB_USER/FB_EMAIL/FB_PASS must be set as envrionment variable or written in a .env file.")
+            exit(1)
 
     def connection(self):
         print("Connecting to facebook...")
